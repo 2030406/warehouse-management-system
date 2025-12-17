@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仓库管理系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>📦 仓库管理</h2>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <span class="icon">📊</span>
+                    <span>仪表盘</span>
+                </a>
+                <a href="#" class="nav-item" data-page="products">
+                    <span class="icon">📦</span>
+                    <span>商品管理</span>
+                </a>
+                <a href="#" class="nav-item" data-page="inbound">
+                    <span class="icon">📥</span>
+                    <span>入库管理</span>
+                </a>
+                <a href="#" class="nav-item" data-page="outbound">
+                    <span class="icon">📤</span>
+                    <span>出库管理</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 仪表盘页面 -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h1>仪表盘</h1>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <p class="stat-label">总商品数</p>
+                            <p class="stat-value" id="totalProducts">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <p class="stat-label">库存不足</p>
+                            <p class="stat-value" id="lowStockProducts">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <p class="stat-label">库存总价值</p>
+                            <p class="stat-value" id="totalValue">¥0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="stat-icon">📥</div>
+                        <div class="stat-info">
+                            <p class="stat-label">今日入库</p>
+                            <p class="stat-value" id="todayInbound">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-icon">📤</div>
+                        <div class="stat-info">
+                            <p class="stat-label">今日出库</p>
+                            <p class="stat-value" id="todayOutbound">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="card">
+                        <h3>库存预警</h3>
+                        <div id="lowStockList" class="low-stock-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品管理页面 -->
+            <div id="products" class="page">
+                <div class="page-header">
+                    <h1>商品管理</h1>
+                    <button class="btn btn-primary" onclick="showProductModal()">+ 添加商品</button>
+                </div>
+                
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>分类</th>
+                                <th>单位</th>
+                                <th>单价</th>
+                                <th>库存</th>
+                                <th>最低库存</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 入库管理页面 -->
+            <div id="inbound" class="page">
+                <div class="page-header">
+                    <h1>入库管理</h1>
+                    <button class="btn btn-primary" onclick="showInboundModal()">+ 添加入库</button>
+                </div>
+                
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>数量</th>
+                                <th>供应商</th>
+                                <th>操作员</th>
+                                <th>备注</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inboundTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 出库管理页面 -->
+            <div id="outbound" class="page">
+                <div class="page-header">
+                    <h1>出库管理</h1>
+                    <button class="btn btn-primary" onclick="showOutboundModal()">+ 添加出库</button>
+                </div>
+                
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>数量</th>
+                                <th>客户</th>
+                                <th>操作员</th>
+                                <th>备注</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="outboundTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 商品模态框 -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">添加商品</h2>
+                <span class="close" onclick="closeProductModal()">&times;</span>
+            </div>
+            <form id="productForm" onsubmit="submitProduct(event)">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>分类</label>
+                    <input type="text" id="productCategory" required>
+                </div>
+                <div class="form-group">
+                    <label>单位</label>
+                    <input type="text" id="productUnit" required>
+                </div>
+                <div class="form-group">
+                    <label>单价</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>最低库存</label>
+                    <input type="number" id="productMinStock" value="10" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 入库模态框 -->
+    <div id="inboundModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加入库</h2>
+                <span class="close" onclick="closeInboundModal()">&times;</span>
+            </div>
+            <form id="inboundForm" onsubmit="submitInbound(event)">
+                <div class="form-group">
+                    <label>选择商品</label>
+                    <select id="inboundProduct" required></select>
+                </div>
+                <div class="form-group">
+                    <label>入库数量</label>
+                    <input type="number" id="inboundQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>供应商</label>
+                    <input type="text" id="inboundSupplier" required>
+                </div>
+                <div class="form-group">
+                    <label>操作员</label>
+                    <input type="text" id="inboundOperator" required>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="inboundNote" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeInboundModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">确认入库</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 出库模态框 -->
+    <div id="outboundModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加出库</h2>
+                <span class="close" onclick="closeOutboundModal()">&times;</span>
+            </div>
+            <form id="outboundForm" onsubmit="submitOutbound(event)">
+                <div class="form-group">
+                    <label>选择商品</label>
+                    <select id="outboundProduct" required></select>
+                </div>
+                <div class="form-group">
+                    <label>出库数量</label>
+                    <input type="number" id="outboundQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>客户</label>
+                    <input type="text" id="outboundCustomer" required>
+                </div>
+                <div class="form-group">
+                    <label>操作员</label>
+                    <input type="text" id="outboundOperator" required>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="outboundNote" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeOutboundModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">确认出库</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

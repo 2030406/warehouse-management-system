@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  warehouse:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./warehouse-data.json:/app/warehouse-data.json
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

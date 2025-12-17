@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+*.md
+warehouse-data.json
+node-v24.12.0-x64.msi
