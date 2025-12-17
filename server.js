@@ -9,18 +9,18 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-// 初始化数据结构（使用内存存储，适配Vercel serverless）
+// 初始化数据结构（使用内存存储）
 let data = {
   products: [],
   inbound_records: [],
   outbound_records: []
 };
 
-// 保存数据（空函数，Vercel环境下使用内存存储）
+// 保存数据（内存模式）
 function saveData() {
-  // Vercel serverless环境，数据保存在内存中
-  console.log('数据已更新（内存模式）');
+  console.log('数据已更新');
 }
 
 // ==================== 商品管理API ====================
@@ -211,13 +211,6 @@ app.get('/api/statistics', (req, res) => {
 });
 
 // 启动服务器
-if (require.main === module) {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`仓库管理系统运行在 http://localhost:${PORT}`);
-    console.log(`局域网访问地址: http://<本机IP>:${PORT}`);
-    console.log('提示: 使用 ipconfig 查看本机IP地址');
-  });
-}
-
-// 导出app供Vercel使用
-module.exports = app;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`仓库管理系统运行在 http://localhost:${PORT}`);
+});
