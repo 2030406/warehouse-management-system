@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,17 +13,43 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// 初始化数据结构（使用内存存储）
+// 数据文件路径
+const DATA_FILE = path.join(__dirname, 'warehouse-data.json');
+
+// 初始化数据结构
 let data = {
   products: [],
   inbound_records: [],
   outbound_records: []
 };
 
-// 保存数据（内存模式）
-function saveData() {
-  console.log('数据已更新');
+// 加载数据
+function loadData() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+      data = JSON.parse(fileData);
+      console.log('✅ 数据加载成功');
+    } else {
+      console.log('📝 数据文件不存在，使用空数据');
+    }
+  } catch (err) {
+    console.error('❌ 加载数据失败:', err);
+  }
 }
+
+// 保存数据
+function saveData() {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+    console.log('✅ 数据已保存');
+  } catch (err) {
+    console.error('❌ 保存数据失败:', err);
+  }
+}
+
+// 启动时加载数据
+loadData();
 
 // ==================== 商品管理API ====================
 
