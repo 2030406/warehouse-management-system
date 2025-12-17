@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试导出功能</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+        }
+        .btn-primary {
+            background: #667eea;
+        }
+        .btn-success {
+            background: #10b981;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            color: #0277bd;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📊 导出功能测试</h1>
+        
+        <button class="btn btn-primary" onclick="testInventoryExport()">
+            测试导出库存数据
+        </button>
+        
+        <button class="btn btn-success" onclick="testRecordsExport()">
+            测试导出出入库记录
+        </button>
+        
+        <div class="info">
+            <strong>说明：</strong><br>
+            1. 点击按钮测试导出功能<br>
+            2. 检查浏览器下载文件夹<br>
+            3. 打开Excel文件查看数据
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+
+        function testInventoryExport() {
+            console.log('测试库存导出:', API_BASE + '/export/inventory');
+            window.open(API_BASE + '/export/inventory', '_blank');
+        }
+
+        function testRecordsExport() {
+            console.log('测试记录导出:', API_BASE + '/export/records');
+            window.open(API_BASE + '/export/records', '_blank');
+        }
+    </script>
+</body>
+</html>
