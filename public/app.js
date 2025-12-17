@@ -351,5 +351,17 @@ async function submitOutbound(event) {
     }
 }
 
+// ==================== 导出功能 ====================
+
+// 导出库存数据
+function exportInventory() {
+    window.location.href = `${API_BASE}/export/inventory`;
+}
+
+// 导出出入库记录
+function exportRecords() {
+    window.location.href = `${API_BASE}/export/records`;
+}
+
 // 初始加载
 loadDashboard();

@@ -91,7 +91,10 @@
             <div id="products" class="page">
                 <div class="page-header">
                     <h1>商品管理</h1>
-                    <button class="btn btn-primary" onclick="showProductModal()">+ 添加商品</button>
+                    <div class="button-group">
+                        <button class="btn btn-success" onclick="exportInventory()">📊 导出库存数据</button>
+                        <button class="btn btn-primary" onclick="showProductModal()">+ 添加商品</button>
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -117,7 +120,10 @@
             <div id="inbound" class="page">
                 <div class="page-header">
                     <h1>入库管理</h1>
-                    <button class="btn btn-primary" onclick="showInboundModal()">+ 添加入库</button>
+                    <div class="button-group">
+                        <button class="btn btn-success" onclick="exportRecords()">📊 导出出入库记录</button>
+                        <button class="btn btn-primary" onclick="showInboundModal()">+ 添加入库</button>
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -141,7 +147,10 @@
             <div id="outbound" class="page">
                 <div class="page-header">
                     <h1>出库管理</h1>
-                    <button class="btn btn-primary" onclick="showOutboundModal()">+ 添加出库</button>
+                    <div class="button-group">
+                        <button class="btn btn-success" onclick="exportRecords()">📊 导出出入库记录</button>
+                        <button class="btn btn-primary" onclick="showOutboundModal()">+ 添加出库</button>
+                    </div>
                 </div>
                 
                 <div class="card">

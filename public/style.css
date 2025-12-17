@@ -94,6 +94,11 @@ body {
     color: #333;
 }
 
+.button-group {
+    display: flex;
+    gap: 12px;
+}
+
 /* 统计卡片 */
 .stats-grid {
     display: grid;
