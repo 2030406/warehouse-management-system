@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,44 +9,19 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
 
-// 数据文件路径
-const DATA_FILE = path.join(__dirname, 'warehouse-data.json');
-
-// 初始化数据结构
+// 初始化数据结构（使用内存存储，适配Vercel serverless）
 let data = {
   products: [],
   inbound_records: [],
   outbound_records: []
 };
 
-// 加载数据
-function loadData() {
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-      data = JSON.parse(fileData);
-      console.log('数据加载成功');
-    } else {
-      console.log('数据文件不存在，使用默认数据');
-    }
-  } catch (err) {
-    console.error('加载数据失败:', err);
-  }
-}
-
-// 保存数据
+// 保存数据（空函数，Vercel环境下使用内存存储）
 function saveData() {
-  try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
-  } catch (err) {
-    console.error('保存数据失败:', err);
-  }
+  // Vercel serverless环境，数据保存在内存中
+  console.log('数据已更新（内存模式）');
 }
-
-// 启动时加载数据
-loadData();
 
 // ==================== 商品管理API ====================
 
@@ -238,8 +211,13 @@ app.get('/api/statistics', (req, res) => {
 });
 
 // 启动服务器
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`仓库管理系统运行在 http://localhost:${PORT}`);
-  console.log(`局域网访问地址: http://<本机IP>:${PORT}`);
-  console.log('提示: 使用 ipconfig 查看本机IP地址');
-});
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`仓库管理系统运行在 http://localhost:${PORT}`);
+    console.log(`局域网访问地址: http://<本机IP>:${PORT}`);
+    console.log('提示: 使用 ipconfig 查看本机IP地址');
+  });
+}
+
+// 导出app供Vercel使用
+module.exports = app;
