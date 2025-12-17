@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:3000/api';
+// 自动检测API地址（支持本地和远程访问）
+const API_BASE = window.location.origin + '/api';
 
 // 页面切换
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -355,12 +356,50 @@ async function submitOutbound(event) {
 
 // 导出库存数据
 function exportInventory() {
-    window.location.href = `${API_BASE}/export/inventory`;
+    try {
+        const url = `${API_BASE}/export/inventory`;
+        console.log('正在导出库存数据...', url);
+        
+        // 创建隐藏的a标签进行下载
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `库存数据_${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // 显示提示
+        setTimeout(() => {
+            alert('正在下载库存数据，请稍候...');
+        }, 100);
+    } catch (error) {
+        console.error('导出失败:', error);
+        alert('导出失败，请检查服务器是否正常运行');
+    }
 }
 
 // 导出出入库记录
 function exportRecords() {
-    window.location.href = `${API_BASE}/export/records`;
+    try {
+        const url = `${API_BASE}/export/records`;
+        console.log('正在导出出入库记录...', url);
+        
+        // 创建隐藏的a标签进行下载
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `出入库记录_${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // 显示提示
+        setTimeout(() => {
+            alert('正在下载出入库记录，请稍候...');
+        }, 100);
+    } catch (error) {
+        console.error('导出失败:', error);
+        alert('导出失败，请检查服务器是否正常运行');
+    }
 }
 
 // 初始加载
